@@ -5,10 +5,9 @@ from langchain_chroma import Chroma
 
 load_dotenv()
 
-CHROMA_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "chroma_db")
+CHROMA_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "..", "chroma_db")
 
 
-# 사용자 질문과 관련있는 청크 검색
 def get_retriever(k: int = 3):
     embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
