@@ -1,0 +1,18 @@
+# 웹 서버
+fastapi
+uvicorn
+
+# LangChain
+langchain
+langchain-openai
+langchain-community
+
+# 벡터 DB
+chromadb
+langchain-chroma
+
+# PDF 로딩
+pypdf
+
+# 유틸리티
+python-dotenv
