@@ -55,19 +55,19 @@ def save_to_chroma(chunks, persist_dir: str):
 def ingest():
     print("=== PDF 데이터 적재 시작 ===")
 
-    print(f"\n[1/3] PDF 로드 중... ({PDF_DIR})")
+    print(f"\n PDF 로드 ({PDF_DIR})")
     documents = load_pdfs(PDF_DIR)
     print(f"-> 총 {len(documents)}페이지 로드 완료")
 
-    print("\n[2/3] 텍스트 청킹 중...")
+    print("\n텍스트 청킹")
     chunks = split_documents(documents)
     print(f"-> 총 {len(chunks)}개 청크 생성 완료")
 
-    print("\n[3/3] 임베딩 및 ChromaDB 저장 중... (OpenAI API 호출 발생)")
+    print("\n임베딩 및 ChromaDB 저장 중")
     save_to_chroma(chunks, CHROMA_DIR)
     print(f"-> ChromaDB 저장 완료: {CHROMA_DIR}")
 
-    print("\n=== 적재 완료 ===")
+
 
 
 if __name__ == "__main__":
