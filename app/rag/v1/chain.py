@@ -20,6 +20,9 @@ PROMPT = ChatPromptTemplate.from_messages(
 문서에 없는 내용은 "해당 정보를 찾을 수 없습니다."라고 답변하세요.
 답변은 한국어로 친절하게 작성하세요.
 
+[사용자 정보]
+{user_info}
+
 [참고 문서]
 {context}""",
         ),
@@ -34,7 +37,11 @@ def format_docs(docs) -> str:
 
 def get_chain():
     chain = (
-        {"context": _retriever | format_docs, "question": RunnablePassthrough()}
+        {
+            "context": (lambda x: x["question"]) | _retriever | format_docs,
+            "question": lambda x: x["question"],
+            "user_info": lambda x: x["user_info"],
+        }
         | PROMPT
         | _llm
         | StrOutputParser()
