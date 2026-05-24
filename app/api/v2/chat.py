@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request
+from langchain_core.messages import HumanMessage, AIMessage
 
 from app.models.schemas import ChatRequest, PolicyAnswer, RAGResponse, UserInfo
 from app.rag.v2.chain import extract_memories
@@ -39,11 +40,21 @@ def _format_user_info(user_info: UserInfo) -> str:
 def chat(request: ChatRequest, req: Request):
     user_info_str = _format_user_info(request.user_info) if request.user_info else "없음"
     memory_str = "\n".join(f"- {m}" for m in request.memory) if request.memory else "없음"
+    history_msg = []
+    for msg in request.recent_chats:
+        if msg["role"] == "human":
+            history_msg.append(HumanMessage(content=msg["content"]))
+        else:
+            history_msg.append(AIMessage(content=msg["content"]))
+    print("====[Spring이 보내준 과거 대화]======")
+    print(request.recent_chats)
+    print("======")
 
     result = req.app.state.chain_v2.invoke({
         "question": request.user_message,
         "user_info": user_info_str,
         "memory": memory_str,
+        "chat_history": history_msg, 
     })
 
     answer_text = "\n".join(p.content for p in result.policies)

@@ -24,6 +24,7 @@ class ChatRequest(BaseModel):
     user_info: Optional[UserInfo] = None
     memory: List[str] = []
     user_message: str
+    recent_chats : List[dict[str, str]] = []
 
 
 # AI 답변 (v1)

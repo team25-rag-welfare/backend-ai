@@ -3,7 +3,7 @@ import logging
 
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_classic.retrievers.multi_query import MultiQueryRetriever
 from pydantic import BaseModel
 
@@ -50,6 +50,7 @@ PROMPT = ChatPromptTemplate.from_messages(
 [참고 문서]
 {context}""",
         ),
+        MessagesPlaceholder(variable_name="chat_history"),
         ("human", "{question}"),
     ]
 )
@@ -105,6 +106,7 @@ def get_chain():
             "question": lambda x: x["question"],
             "user_info": lambda x: x["user_info"],
             "memory": lambda x: x["memory"],
+            "chat_history": lambda x: x["chat_history"],
         }
         | PROMPT
         | _structured_llm
