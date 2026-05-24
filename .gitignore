@@ -206,9 +206,17 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-# env
-.env
+# ChromaDB
+chroma_db/
+
+# Data
+data/pdf/
+
 
 # ChromaDB vector database
 chroma_db/
 chroma_db_v2/
+
+# Claude
+CLAUDE.md
+
