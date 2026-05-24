@@ -8,7 +8,7 @@ from app.rag.v1.retriever import get_retriever
 
 load_dotenv()
 
-_retriever = get_retriever(k=3)
+_retriever = get_retriever(k=5)
 _llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 
 PROMPT = ChatPromptTemplate.from_messages(
@@ -16,8 +16,10 @@ PROMPT = ChatPromptTemplate.from_messages(
         (
             "system",
             """당신은 임산부 및 영유아 가정을 위한 복지 정책 안내 전문 챗봇입니다.
-아래 제공된 문서를 참고하여 질문에 답변하세요.
-문서에 없는 내용은 "해당 정보를 찾을 수 없습니다."라고 답변하세요.
+
+아래 [참고 문서]에 있는 내용만을 사용하여 질문에 답변하세요.
+[참고 문서]에 없는 내용은 절대 추가하거나 추측하지 마세요.
+문서에서 답을 찾을 수 없으면 반드시 "해당 정보를 찾을 수 없습니다."라고만 답변하세요.
 답변은 한국어로 친절하게 작성하세요.
 
 [사용자 정보]
@@ -30,7 +32,7 @@ PROMPT = ChatPromptTemplate.from_messages(
     ]
 )
 
-
+# 청크 리스트 포맷팅
 def format_docs(docs) -> str:
     return "\n\n".join(doc.page_content for doc in docs)
 
