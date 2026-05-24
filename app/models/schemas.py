@@ -24,6 +24,9 @@ class ChatRequest(BaseModel):
     user_info: Optional[UserInfo] = None
     memory: List[str] = []
     user_message: str
+    #재생성 여부
+    regenerate: bool = False
+    previous_response: Optional[str] = None
 
 
 # AI 답변 (v1)
