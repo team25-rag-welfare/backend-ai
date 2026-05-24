@@ -40,14 +40,19 @@ def chat(request: ChatRequest, req: Request):
     user_info_str = _format_user_info(request.user_info) if request.user_info else "없음"
     memory_str = "\n".join(f"- {m}" for m in request.memory) if request.memory else "없음"
 
-    result = req.app.state.chain_v2.invoke({
+    chain = req.app.state.chain_v2_regenerate if request.regenerate else req.app.state.chain_v2
+    invoke_input = {
         "question": request.user_message,
         "user_info": user_info_str,
         "memory": memory_str,
-    })
+    }
+    if request.regenerate:
+        invoke_input["previous_response"] = request.previous_response or "없음"
+
+    result = chain.invoke(invoke_input)
 
     answer_text = "\n".join(p.content for p in result.policies)
-    new_memories = extract_memories(request.user_message, answer_text)
+    new_memories = [] if request.regenerate else extract_memories(request.user_message, answer_text)
 
     policies = [
         PolicyAnswer(
