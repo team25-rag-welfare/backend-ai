@@ -25,6 +25,9 @@ class ChatRequest(BaseModel):
     memory: List[str] = []
     user_message: str
     recent_chats : List[dict[str, str]] = []
+    #재생성 여부
+    regenerate: bool = False
+    previous_response: Optional[str] = None
 
 
 # AI 답변 (v1)
