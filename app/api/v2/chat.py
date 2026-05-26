@@ -56,8 +56,8 @@ def chat(request: ChatRequest, req: Request):
         "user_info": user_info_str,
         "memory": memory_str,
         "chat_history": history_msg, 
-    })
     }
+    
     if request.regenerate:
         invoke_input["previous_response"] = request.previous_response or "없음"
 
