@@ -41,13 +41,13 @@ def chat(request: ChatRequest, req: Request):
     user_info_str = _format_user_info(request.user_info) if request.user_info else "없음"
     memory_str = "\n".join(f"- {m}" for m in request.memory) if request.memory else "없음"
     history_msg = []
-    for msg in request.recent_chats:
+    for msg in request.chat_history:
         if msg["role"] == "human":
             history_msg.append(HumanMessage(content=msg["content"]))
         else:
             history_msg.append(AIMessage(content=msg["content"]))
     print("====[Spring이 보내준 과거 대화]======")
-    print(request.recent_chats)
+    print(request.chat_history)
     print("======")
 
     chain = req.app.state.chain_v2_regenerate if request.regenerate else req.app.state.chain_v2
