@@ -41,24 +41,30 @@ def chat(request: ChatRequest, req: Request):
     user_info_str = _format_user_info(request.user_info) if request.user_info else "없음"
     memory_str = "\n".join(f"- {m}" for m in request.memory) if request.memory else "없음"
     history_msg = []
-    for msg in request.recent_chats:
+    for msg in request.chat_history:
         if msg["role"] == "human":
             history_msg.append(HumanMessage(content=msg["content"]))
         else:
             history_msg.append(AIMessage(content=msg["content"]))
     print("====[Spring이 보내준 과거 대화]======")
-    print(request.recent_chats)
+    print(request.chat_history)
     print("======")
 
-    result = req.app.state.chain_v2.invoke({
+    chain = req.app.state.chain_v2_regenerate if request.regenerate else req.app.state.chain_v2
+    invoke_input = {
         "question": request.user_message,
         "user_info": user_info_str,
         "memory": memory_str,
         "chat_history": history_msg, 
     })
+    }
+    if request.regenerate:
+        invoke_input["previous_response"] = request.previous_response or "없음"
+
+    result = chain.invoke(invoke_input)
 
     answer_text = "\n".join(p.content for p in result.policies)
-    new_memories = extract_memories(request.user_message, answer_text)
+    new_memories = [] if request.regenerate else extract_memories(request.user_message, answer_text)
 
     policies = [
         PolicyAnswer(
