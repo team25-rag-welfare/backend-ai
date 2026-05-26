@@ -3,7 +3,7 @@ import logging
 
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_classic.retrievers.multi_query import MultiQueryRetriever
 from pydantic import BaseModel
 
@@ -55,6 +55,7 @@ REGEN_PROMPT = ChatPromptTemplate.from_messages(
             "system",
             f"{_PERSONA}\n\n{_RULES}\n8. [이전 답변]을 참고하여 부족하거나 불명확한 부분을 보완하고, 더 유용하고 풍부한 내용으로 개선된 답변을 제공하세요.\n\n{_USER_SECTION}\n\n[이전 답변]\n{{previous_response}}\n\n{_DOC_SECTION}",
         ),
+        MessagesPlaceholder(variable_name="chat_history"),
         ("human", "{question}"),
     ]
 )
@@ -112,6 +113,7 @@ def get_chain():
             "question": lambda x: x["question"],
             "user_info": lambda x: x["user_info"],
             "memory": lambda x: x["memory"],
+            "chat_history": lambda x: x["chat_history"],
         }
         | PROMPT
         | structured_llm
