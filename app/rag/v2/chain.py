@@ -54,6 +54,7 @@ PROMPT = ChatPromptTemplate.from_messages(
         ("human", "{question}"),
     ]
 )
+print("저장된 메모리다. : {memory}")
 
 # 메모리 추출
 class MemoryExtraction(BaseModel):
