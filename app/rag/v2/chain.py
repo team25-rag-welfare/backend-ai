@@ -148,14 +148,6 @@ def extract_memories(question: str, answer: str) -> list[str]:
 
 
 def format_docs(docs) -> str:
-    print("====[RAG 검색 결과]======")
-    for i, doc in enumerate(docs, start=1):
-       source = os.path.basename(doc.metadata.get("source", ""))
-       print(f"[{i}] source={source}")
-       print(doc.page_content[:500])
-       print("------")
-    print("======")
-    
     parts = []
     for doc in docs:
         source = os.path.basename(doc.metadata.get("source", ""))
