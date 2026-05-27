@@ -13,6 +13,7 @@ langchain-chroma
 
 # PDF 로딩
 pypdf
+pymupdf
 
 # 유틸리티
 python-dotenv

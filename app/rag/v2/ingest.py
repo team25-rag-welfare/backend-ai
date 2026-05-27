@@ -1,11 +1,10 @@
 import os
 import shutil
 from dotenv import load_dotenv
-from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import PyMuPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
-from langchain_core.documents import Document
 
 load_dotenv()
 
@@ -20,17 +19,17 @@ def load_pdfs(pdf_dir: str):
         raise FileNotFoundError(f"PDF 파일이 없습니다: {pdf_dir}")
     for filename in pdf_files:
         filepath = os.path.join(pdf_dir, filename)
-        loader = PyPDFLoader(filepath)
+        loader = PyMuPDFLoader(filepath)
         pages = loader.load()
-        full_text = "\n".join(page.page_content for page in pages)
-        documents.append(Document(page_content=full_text, metadata={"source": filepath}))
+        documents.extend(pages)
+        print(f"  - {filename}: {len(pages)}페이지 로드")
     return documents
 
 
 def split_documents(documents):
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=500,
-        chunk_overlap=100,
+        chunk_size=1000,
+        chunk_overlap=150,
         separators=["\n\n", "\n", ".", " ", ""]
     )
     return splitter.split_documents(documents)

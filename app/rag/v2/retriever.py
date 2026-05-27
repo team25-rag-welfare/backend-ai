@@ -17,8 +17,12 @@ def get_retriever(k: int = 5):
     )
 
     retriever = vector_db.as_retriever(
-        search_type="similarity",
-        search_kwargs={"k": k}
+        search_type="mmr",
+        search_kwargs={
+            "k": k,
+            "fetch_k": 20,
+            "lambda_mult": 0.5,
+        }
     )
 
     return retriever
