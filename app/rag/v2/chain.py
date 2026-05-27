@@ -109,7 +109,6 @@ REGEN_PROMPT = ChatPromptTemplate.from_messages(
         ("human", "{question}"),
     ]
 )
-print("저장된 메모리다. : {memory}")
 
 
 class MemoryExtraction(BaseModel):
