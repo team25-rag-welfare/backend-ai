@@ -59,6 +59,7 @@ REGEN_PROMPT = ChatPromptTemplate.from_messages(
         ("human", "{question}"),
     ]
 )
+print("저장된 메모리다. : {memory}")
 
 
 class MemoryExtraction(BaseModel):
@@ -77,6 +78,7 @@ EXTRACT_MEMORY_PROMPT = ChatPromptTemplate.from_messages([
 - 거주지, 임신 여부, 나이, 자녀 수, 임신 주차, 소득 구간 등 기초 정보에 이미 있는 항목
 - 제3자(친구, 가족 등) 정보
 - 사용자가 명시적으로 언급하지 않은 추측 정보
+- 이미 저장된 메모리
 
 없으면 빈 리스트 반환. 형식: 간결한 한 문장 (예: "부모급여 신청 완료", "소득 구간 중위 50%로 변경")"""),
     ("human", "사용자 질문: {question}\n\n답변: {answer}"),
