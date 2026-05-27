@@ -46,8 +46,18 @@ def chat(request: ChatRequest, req: Request):
             history_msg.append(HumanMessage(content=msg["content"]))
         else:
             history_msg.append(AIMessage(content=msg["content"]))
+    print("====[사용자 질문]======")
+    print(request.user_message)
+    print("======") 
     print("====[Spring이 보내준 과거 대화]======")
     print(request.chat_history)
+    print("======")
+    print("====[재생성 여부]======")
+    print(request.regenerate)
+    print("====[현재 정책]======")
+    print(request.current_policy)
+    print("====[이전 답변]======")
+    print(request.previous_response)
     print("======")
 
     chain = req.app.state.chain_v2_regenerate if request.regenerate else req.app.state.chain_v2
@@ -55,7 +65,8 @@ def chat(request: ChatRequest, req: Request):
         "question": request.user_message,
         "user_info": user_info_str,
         "memory": memory_str,
-        "chat_history": history_msg, 
+        "chat_history": history_msg,
+        "current_policy": request.current_policy or "없음",
     }
     
     if request.regenerate:
